@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33829.357
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PairedNodesAlgorith", "PairedNodesAlgorith\PairedNodesAlgorith.csproj", "{74B2D1FB-52AC-400F-B8A6-146E092C137A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphOfNodesAlgorithm", "GraphOfNodesAlgorithm\GraphOfNodesAlgorithm.csproj", "{66E4BCBD-06C1-489A-B073-68FBCCE3E3A9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{74B2D1FB-52AC-400F-B8A6-146E092C137A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74B2D1FB-52AC-400F-B8A6-146E092C137A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74B2D1FB-52AC-400F-B8A6-146E092C137A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74B2D1FB-52AC-400F-B8A6-146E092C137A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66E4BCBD-06C1-489A-B073-68FBCCE3E3A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66E4BCBD-06C1-489A-B073-68FBCCE3E3A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66E4BCBD-06C1-489A-B073-68FBCCE3E3A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66E4BCBD-06C1-489A-B073-68FBCCE3E3A9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {49C24EDD-3543-4201-A6DA-A4394196222F}
+	EndGlobalSection
+EndGlobal
