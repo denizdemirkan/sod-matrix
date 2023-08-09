@@ -5,7 +5,6 @@ List<List<Constraint>> resultConstraints = new List<List<Constraint>>();
 List<Constraint> firstConstraints = new List<Constraint>();
 resultConstraints.Add(firstConstraints);
 
-
 Constraint n1 = new Constraint();
 Constraint n2 = new Constraint();
 Constraint n3 = new Constraint();
@@ -27,9 +26,8 @@ Constraint n18 = new Constraint();
 Constraint n19 = new Constraint();
 Constraint n20 = new Constraint();
 Constraint n21 = new Constraint();
-
-
-
+Constraint n22 = new Constraint();
+Constraint n23 = new Constraint();
 
 firstConstraints.Add(n1);
 firstConstraints.Add(n2);
@@ -52,6 +50,8 @@ firstConstraints.Add(n18);
 firstConstraints.Add(n19);
 firstConstraints.Add(n20);
 firstConstraints.Add(n21);
+firstConstraints.Add(n22);
+firstConstraints.Add(n23);
 
 string r1 = "x";
 string r2 = "y";
@@ -63,6 +63,7 @@ string r7 = "l";
 string r8 = "m";
 string r9 = "n";
 string r10 = "i";
+string r11 = "p";
 
 List<string> allResources = new List<string>();
 allResources.Add(r1);
@@ -75,6 +76,7 @@ allResources.Add(r7);
 allResources.Add(r8);
 allResources.Add(r9);
 allResources.Add(r10);
+allResources.Add(r11);
 
 n1.resources.Add("i");
 n1.resources.Add("t");
@@ -139,6 +141,11 @@ n20.resources.Add("q");
 n21.resources.Add("m");
 n21.resources.Add("k");
 
+n22.resources.Add("l");
+n22.resources.Add("x");
+
+n23.resources.Add("n");
+n23.resources.Add("p");
 
 
 // Basic Configurations //
@@ -146,30 +153,28 @@ n21.resources.Add("k");
 bool isNewConstraintFind = true;
 int constraintLevel = 0; // start from 1'st list (2 pairs) and increase over loop
 
-while (isNewConstraintFind)
+while (isNewConstraintFind)  // ensure there is a new constraint founded
 {
     List<Constraint> newConstraintList = new List<Constraint>();
 
-    isNewConstraintFind = false; // constraint listesini bulduktan sonra oluştur
+    isNewConstraintFind = false; 
 
-    foreach(Constraint constraint in resultConstraints.ElementAt(constraintLevel)) // her constraint'i gez
+    foreach (Constraint constraint in resultConstraints.ElementAt(constraintLevel)) // loop every "2 pairs constraints", constraint level is also complexity level
     {
-
-        foreach (string resource in allResources)        // her resource'u gez
+        foreach (string resource in allResources)        // loop every exist resource
         {
-            if (constraint.resources.Contains(resource))
+            if (constraint.resources.Contains(resource))    // check if current constraint contains resource
             {
                 continue;
             }
-
             bool noConstraint = false;
             foreach (string constraintResource in constraint.resources) // her c. resource'u gez ve karşılatır
             {
-                if (noConstraint)
+                if (noConstraint)   // eğer önceki c.resource ile resource arasında constraint yoksa geç zaman kaybetme
                 {
                     continue;
                 }
-                if(!isConstraint(resource, constraintResource))
+                if(!isConstraint(resource, constraintResource))  // eğer resource ile c.resource arasında constraint yoksa direkt geç zaman kaybetme.
                 {
                     noConstraint = true;
                     continue;
@@ -183,29 +188,29 @@ while (isNewConstraintFind)
                 {
                     newConstraint.resources.Add(constraintResource);
                 }
-
                 newConstraintList.Add(newConstraint);
                 isNewConstraintFind = true;
-
             }
         }
     }
     constraintLevel++;
     newConstraintList = makeConstraintsUnique(newConstraintList);
-    resultConstraints.Add(newConstraintList);
+    if (newConstraintList.Count > 0)
+    {
+        resultConstraints.Add(newConstraintList);
+    }
 }
+List<Constraint> allConstraints = new List<Constraint>();
+allConstraints = finalConstraints();
+Console.WriteLine("");
 
-foreach(Constraint constraint in resultConstraints.ElementAt(1))
-{
-    Console.WriteLine(resultConstraints.ElementAt(1).Count);
-    
-}
 
+// Remove all the same constraint matchings except one, like x,y,z & z,x,y etc.
 List<Constraint> makeConstraintsUnique(List<Constraint> constraintGiven)
 {
     List<Constraint> tempConstraint = new List<Constraint>();
 
-    foreach (Constraint constraint in constraintGiven)  // yeni oluşan çoklu constraintleri gez
+    foreach (Constraint constraint in constraintGiven)  // sort all resources of the constraint list like, x,y,z & z,x,y to x,y,z & x,y,z
     {
         constraint.resources.Sort();
 
@@ -216,21 +221,72 @@ List<Constraint> makeConstraintsUnique(List<Constraint> constraintGiven)
         else
         {
             bool areEqual = false;
-            foreach (Constraint c in tempConstraint)     // sonuç listesindeki elemanları gez, aynı mı diye bak..
+            foreach (Constraint c in tempConstraint)     // check if there is a equal constraint
             {
                 areEqual = constraint.resources.SequenceEqual(c.resources);
-                if (areEqual)        // aynı bulursa döngüden çık
+                if (areEqual)        // if same break
                 {
                     break;
                 }
             }
-            if (!areEqual)          // aynı eleman yoksa constraint olarak ekle
+            if (!areEqual)          // if there is no same in list, add
             {
                 tempConstraint.Add(constraint);
             }
         }
     }
     return tempConstraint;
+}
+
+// Check smaller constraints if they are a part of bigger combinations. 
+List<Constraint> finalConstraints()
+{
+    List<Constraint> resultList = new List<Constraint>();
+    List<Constraint> allConstraints = new List<Constraint>();
+    foreach(List<Constraint> cl in resultConstraints)
+    {
+        foreach(Constraint c in cl)
+        {
+            allConstraints.Add(c);
+        }
+    }
+    foreach(Constraint constraint in allConstraints)
+    {
+        bool isBiggerExist = false;
+        foreach(Constraint constraintTarget in allConstraints)
+        {
+            int sameCounter = 0;
+
+            if (constraintTarget.resources.Count <= constraint.resources.Count)  // equality siituation handled in make makeConstraintsUnique() function
+            {
+                continue;
+            }
+            if (constraint == constraintTarget)
+            {
+                continue;
+            }
+            foreach(string resouce in constraint.resources)
+            {
+                if (!constraintTarget.resources.Contains(resouce))
+                {
+                    break;
+                }
+
+                sameCounter++;
+            }
+            if (sameCounter == constraint.resources.Count) 
+            {
+                isBiggerExist = true;
+                break;
+            }
+        }
+
+        if (!isBiggerExist)
+        {
+            resultList.Add(constraint);
+        }
+    }
+    return resultList;
 }
 
 bool isConstraint(string resource1, string resource2)
